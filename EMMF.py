@@ -37,7 +37,7 @@ def get_mails(con,search):
     mails = []
     for mnbr in mlist:
         stat, data = con.fetch( mnbr ,'(RFC822)')
-        if not stat == 'OK' : raise Warning(UserWarning('Could not download mails "'+ mlist +'" from mailbox "'+ mailbox +'", returned stat "'+ stat +'", data "'+ data +'"'))
+        if not stat == 'OK' : raise Warning(UserWarning('Could not download mails "'+ str(mlist) +'" from mailbox "'+ mailbox +'", returned stat "'+ str(stat) +'", data "'+ str(data) +'"'))
 
         mails.append(email.message_from_bytes(data[0][1], policy=email.policy.default))
 
@@ -52,7 +52,7 @@ def quit():
     con.logout()
     print('Finally done ...')
     print()
-    input("To quit the programm, press ENTER.")
+    # input("To quit the programm, press ENTER.") # Uncomment to provide easy usage when frontend required
     sys.exit(0)
     
 
@@ -63,16 +63,16 @@ con = auth_imap(user, password, imap_url) #Connect IMAP
 smtpcon = auth_smtp(user,password,smtp_url,smtp_port) #Connect SMTP
 stat, data = con.select(mailbox = mailbox) #Check mailbox
 
-if not stat == 'OK' : raise Warning(UserWarning('Could not select mailbox "'+ mailbox +'", returned stat "'+stat+'", data "'+data+'"'))
+if not stat == 'OK' : raise Warning(UserWarning('Could not select mailbox "'+ mailbox +'", returned stat "'+str(stat)+'", data "'+str(data)+'"'))
 
 print()
 
 cm = str(data[0])[2:len(str(data [0]))-1]
-if not cm.isdigit() or ( cm.isdigit() and int(cm) < 1) : raise Warning(UserWarning('No messages in mailbox "'+ mailbox +'", returned stat "'+stat+'", data "'+data+'"'))
+if not cm.isdigit() or ( cm.isdigit() and int(cm) < 1) : raise Warning(UserWarning('No messages in mailbox "'+ mailbox +'", returned stat "'+str(stat)+'", data "'+str(data)+'"'))
 
 stat, data = con.search(None,'Unseen')
 
-if not stat == 'OK' : raise Warning(UserWarning('Could not search mailbox "'+ mailbox +'", returned stat "'+stat+'", data "'+data+'"'))
+if not stat == 'OK' : raise Warning(UserWarning('Could not search mailbox "'+ mailbox +'", returned stat "'+str(stat)+'", data "'+str(data)+'"'))
 
 print( str( len( data[0].decode("utf-8").split() ) ) + ' unread E-Mails: '+ data[0].decode("utf-8"))
 print()
@@ -84,7 +84,7 @@ mails = get_mails(con,data[0])
 print()
 counter = 1
 for msg in mails: 
-    print(str(counter) +'th E-Mail on its way to everybody!')
+    print(str(counter) +"'th E-Mail on its way to everybody!")
     smtpcon.send_message(msg,None,recipients)
     counter = counter + 1
 print ()
