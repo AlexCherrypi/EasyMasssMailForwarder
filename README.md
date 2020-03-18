@@ -10,4 +10,4 @@ This project was developed with Python 3.6 so no other compatibility is guarante
 
 ### Donations
 
-If you want to show your appreciation, you can donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6TWDCVP9F2Z7Y&source=url). Thanks!
+If you want to show your appreciation, you can donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4H2R9V7KZCSR4&source=url). Thanks!
