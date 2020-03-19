@@ -1,4 +1,5 @@
-import sys, imaplib, smtplib, email, email.policy
+import sys, imaplib, smtplib, email, email.policy, random
+from time import sleep
 
 user = 'yourEmailHere@gmail.com'
 password = 'asdfasdfasdfasdf' # For Gmail visit https://myaccount.google.com/apppasswords ,  select App (E-Mail) and Device (whatever u wanna call it) ,  select generate  and   paste the generated code between the single quotation marks
@@ -11,6 +12,10 @@ mailbox = 'School' # The Name of your Mailbox you wat to query
 # All the E-Mail adresses, you want the unread mails to be forwarded to. 
 #   Enclosed in single quotation marks,  seperated by comma and space  and   enclosed in square brackets.
 recipients = ['idk@ab.cd','idk@ef.gh']
+
+spammrejectionprotection = True # If set to True, we will forward the Mails to every adress in 'recipients' individually to circumvent some spam filters
+srptmin = 1 #spamm rejection protection minimal wait time in milliseconds. Convert in https://duckduckgo.com/?q=milliseconds
+srptmax = 1000 #spamm rejection protection minimal wait time in milliseconds. Convert in https://duckduckgo.com/?q=milliseconds
 
 
 ## Functions definition
@@ -84,8 +89,23 @@ mails = get_mails(con,data[0])
 print()
 counter = 1
 for msg in mails: 
-    print(str(counter) +"'th E-Mail on its way to everybody!")
-    smtpcon.send_message(msg,None,recipients)
+    if not spammrejectionprotection:
+        smtpcon.send_message(msg,None,recipients)
+        print(str(counter) +"'th E-Mail on its way to everybody!")
+    else :
+        print(str(counter) +"'th E-Mail on its way.")
+        for recipient in recipients:
+            print('    '+ str(counter) +"'th E-Mail sent to "+ recipient +' .')
+            smtpcon.send_message(msg,None,recipient)
+            slp = str(random.randint(srptmin, srptmax))
+            if len(slp) <= 3: 
+                for x in range( 4 - len(slp) ): 
+                    slp = '0'+slp
+            slp = float(slp[:-3]+'.'+slp[-3:])
+            print ('    Sleeping for '+ str(slp) +' seconds.')
+            sleep(slp)
+        print(str(counter) +"'th E-Mail completely sent!")
+        print()
     counter = counter + 1
 print ()
 print ('Done!')
